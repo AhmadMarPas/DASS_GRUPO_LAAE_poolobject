@@ -88,17 +88,18 @@ public class ReusablePoolTest {
     }
     
 	/**
-	 * Test method for
-	 * {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
+	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
 	 * Realizado por: Luis Ignacio de Luna Gómez
 	 * Fecha: 09/02/2025
-		 * @throws DuplicatedInstanceException 
-		 */
+	 * @author Ahmad Mareie Pascual
+	 * Fecha: 10/02/2025
+	 * Añadida la comprobación de DuplicatedInstanceException
+	 * @throws DuplicatedInstanceException 
+	 */
 		@Test
-		@DisplayName("git commit -m \"testReleaseReusable: Implementación del test para liberar y reutilizar objetos en ReusablePool\"\r\n" + //
-						"")
+		@DisplayName("git commit -m \"testReleaseReusable: Implementación del test para liberar y reutilizar objetos en ReusablePool\"\r\n")
 		//@Disabled("Not implemented yet") //Desactivar para poder ejectuar la prueba
-		public void testReleaseReusable() throws DuplicatedInstanceException {
+		public void testReleaseReusable() {
 
 		try {
 			// Creo una instancia del pool
@@ -119,13 +120,15 @@ public class ReusablePoolTest {
 			//Verifico que el pool sigue permitiendonos la adquisición de objetos
 			Reusable objetoVerificador = pool.acquireReusable();
 			assertNotNull(objetoVerificador, "El objeto adquirido no debe ser nulo");
-		}
+			
+		    while (objeto != null) {
+		    	pool.releaseReusable(objeto);
+		    }
+            fail("Debería lanzar DuplicatedInstanceException");
 
-		catch (NotFreeInstanceException e) {
-			e.printStackTrace();
-			assertTrue(false, "No debería lanzar excepción");
+		} catch (NotFreeInstanceException | DuplicatedInstanceException e) {
+			System.err.println(e.getMessage());
 		}
-
 	}
 
 }
